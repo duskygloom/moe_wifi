@@ -31,6 +31,7 @@ class TextInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (controller != null) controller!.text = initialValue ?? '';
     return TextFormField(
       decoration: InputDecoration(labelText: labelText),
       obscureText: obscureText,

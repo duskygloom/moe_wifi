@@ -134,6 +134,30 @@ class ConfigStorage extends ChangeNotifier {
     notifyListeners();
   }
 
+  /* static mode */
+
+  bool get staticMode {
+    final value = _getConfig<bool>('staticMode');
+    return value ?? false;
+  }
+
+  set staticMode(bool value) {
+    _putConfig<bool>('staticMode', value);
+    notifyListeners();
+  }
+
+  /* static mode */
+
+  String get wifiDevice {
+    final value = _getConfig<String>('wifiDevice');
+    return value ?? '';
+  }
+
+  set wifiDevice(String value) {
+    _putConfig<String>('wifiDevice', value);
+    notifyListeners();
+  }
+
   @override
   String toString() {
     return '$length configs.';

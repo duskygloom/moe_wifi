@@ -1,75 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:moe_wifi/model/config_storage.dart';
-import 'package:moe_wifi/model/form_keys.dart';
-import 'package:moe_wifi/view/core/text_input.dart';
-import 'package:moe_wifi/view/core/validators.dart';
+import 'package:moe_wifi/view/home_app_bar/settings_page/adapter_dialog.dart';
+import 'package:moe_wifi/view/home_app_bar/settings_page/static_ip_switch.dart';
 
 class SettingsForm extends StatelessWidget {
-  const SettingsForm({
-    super.key,
-    required this.routeCtrl,
-    required this.timeoutCtrl,
-  });
-
-  final TextEditingController routeCtrl;
-  final TextEditingController timeoutCtrl;
+  const SettingsForm({super.key});
 
   @override
   Widget build(BuildContext context) {
     final config = ConfigStorage.of(context, true);
-    final formKey = FormKeys.settingsKeyOf(context);
     final queries = Uri.parse(config.authUrl).queryParameters;
 
-    final fieldData = [
-      _FieldData(
-        label: 'Route',
-        value: config.route,
-        controller: routeCtrl,
-        validator: emptyValidator,
+    final fieldWidgets = <Widget>[
+      ListTile(
+        leading: Icon(Symbols.alt_route),
+        title: Text('Route'),
+        subtitle: Text(config.route),
+        onTap: () {},
       ),
-      _FieldData(
-        label: 'Timeout (ms)',
-        value: config.timeoutInMillis.toString(),
-        controller: timeoutCtrl,
-        validator: (text) => numberValidator(text, false),
+      ListTile(
+        leading: Icon(Symbols.timer),
+        title: Text('Timeout'),
+        subtitle: Text(config.timeoutInMillis.toString()),
+        onTap: () {},
       ),
-      _FieldData(label: 'IP', value: queries['ip'], enabled: false),
-      _FieldData(label: 'MAC', value: queries['mac'], enabled: false),
-      _FieldData(label: 'Code', value: queries['sc'], enabled: false),
-      _FieldData(label: 'Cookie', value: config.cookie, enabled: false),
+      ListTile(
+        leading: Icon(Symbols.settings_input_antenna),
+        title: Text('Adapter name'),
+        subtitle: Text(config.wifiDevice),
+        onTap: () {
+          Navigator.push(
+            context,
+            DialogRoute(
+              context: context,
+              builder: (context) => AdapterDialog(),
+            ),
+          );
+        },
+      ),
+      ListTile(
+        leading: Icon(Symbols.dns),
+        title: Text('Static IP'),
+        trailing: StaticIpSwitch(),
+      ),
+      ListTile(
+        leading: Icon(Symbols.wifi),
+        title: Text('IP'),
+        subtitle: Text(queries['ip'] ?? ''),
+        enabled: false,
+      ),
+      ListTile(
+        leading: Icon(Symbols.devices),
+        title: Text('MAC'),
+        subtitle: Text(queries['mac'] ?? ''),
+        enabled: false,
+      ),
+      ListTile(
+        leading: Icon(Symbols.qr_code),
+        title: Text('Code'),
+        subtitle: Text(queries['sc'] ?? ''),
+        enabled: false,
+      ),
+      ListTile(
+        leading: Icon(Symbols.cookie),
+        title: Text('Cookie'),
+        subtitle: Text(config.cookie),
+        enabled: false,
+      ),
     ];
 
-    return Form(
-      key: formKey,
-      child: ListView.separated(
-        itemCount: fieldData.length,
-        itemBuilder: (context, index) => fieldData[index].getTextInput(),
-        separatorBuilder: (context, index) => SizedBox(height: 10),
-      ),
+    return ListView.separated(
+      itemCount: fieldWidgets.length,
+      itemBuilder: (context, index) => fieldWidgets[index],
+      separatorBuilder: (context, index) => SizedBox(height: 10),
     );
   }
-}
-
-class _FieldData {
-  const _FieldData({
-    required this.label,
-    this.value,
-    this.enabled = true,
-    this.controller,
-    this.validator,
-  });
-
-  final String label;
-  final String? value;
-  final bool enabled;
-  final TextEditingController? controller;
-  final ValidatorType? validator;
-
-  TextInput getTextInput() => TextInput(
-    labelText: label,
-    initialValue: controller == null ? value : null,
-    enabled: enabled,
-    controller: controller == null ? null : (controller!..text = value ?? ''),
-    validator: validator,
-  );
 }
