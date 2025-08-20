@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:moe_wifi/model/config_storage.dart';
-import 'package:moe_wifi/model/ip_api.dart';
+import 'package:moe_wifi/model/network_api.dart';
 
 class StaticIpSwitch extends StatelessWidget {
   const StaticIpSwitch({super.key});
@@ -13,10 +13,15 @@ class StaticIpSwitch extends StatelessWidget {
     return Switch(
       value: config.staticMode,
       onChanged: (value) async {
+        final api = NetworkApi.of(context);
         if (Platform.isLinux) {
-          final ipApi = IpApi.of(context);
-          final devices = await ipApi.fetchWifiDevices();
-          print(devices);
+          if (value) {
+            // manual mode
+            await api.setManual();
+          } else {
+            // auto mode
+            await api.setAuto();
+          }
           config.staticMode = value;
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

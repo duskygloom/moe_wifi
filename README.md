@@ -16,3 +16,17 @@ MoE Wi-Fi Utility Application
 ### Features
 1. Save accounts and use them to login with one click (or not because of some issues in Android, hopefully they will be fixed in a later update).
 2. Check running sessions and kill them when needed.
+3. Switch between manual and auto mode from the application itself in Linux. It uses `nmcli` and won't work without it.
+
+### Issues
+- **IP changes causing sessions to logout.**<br>
+    1. systemd-resolved<br>
+        If your system is using `systemd-resolved` along with `NetworkManager`, it may lead to this situation.<br>
+        Disable `systemd-resolved` by using the following steps:
+        ```sh
+        sudo systemctl disable systemd-resolved
+        sudo systemctl stop systemd-resolved
+        sudo rm /etc/resolv.conf
+        sudo vim /etc/NetworkManager/NetworkManager.conf
+        ```
+        Under the `[main]` section, add `dns=default`.

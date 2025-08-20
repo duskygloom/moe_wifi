@@ -2,23 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:moe_wifi/core/main_theme.dart';
 import 'package:moe_wifi/model/config_storage.dart';
-import 'package:moe_wifi/model/ip_api.dart';
-import 'package:moe_wifi/view/core/save_dialog.dart';
+import 'package:moe_wifi/model/network_api.dart';
 
 class AdapterDialog extends StatelessWidget {
   const AdapterDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final adaptersFuture = IpApi.of(context).fetchWifiDevices();
+    final adaptersFuture = NetworkApi.of(context, true).fetchDevices();
 
-    return SaveDialog(
-      onSave: () {
-        Navigator.pop(context);
-      },
-      child: SizedBox(
-        width: 500,
-        height: 500,
+    return AlertDialog(
+      title: Text('Adapters'),
+      content: SizedBox(
+        height: scaledSizeOf(context, 200),
+        width: scaledSizeOf(context, 400),
         child: FutureBuilder(
           future: adaptersFuture,
           builder: (context, snapshot) {
@@ -41,6 +38,14 @@ class AdapterDialog extends StatelessWidget {
           },
         ),
       ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Close'),
+        ),
+      ],
     );
   }
 }
@@ -60,6 +65,7 @@ class AdapterList extends StatelessWidget {
             key: ValueKey(adapters[index]),
             value: adapters[index],
             groupValue: config.wifiDevice,
+            contentPadding: EdgeInsets.zero,
             title: Text(adapters[index]),
             onChanged: (value) async {
               if (value != null) {

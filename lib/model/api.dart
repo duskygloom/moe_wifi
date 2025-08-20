@@ -17,6 +17,13 @@ class Api {
     'home': '$baseURL/userportal/home.do',
   };
 
+  static const routes = [
+    'http://1.254.254.254',
+    'http://detectportal.firefox.com/canonical.html',
+    'http://connectivitycheck.gstatic.com',
+    'https://www.msftncsi.com/',
+  ];
+
   static const String useragent =
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0';
 

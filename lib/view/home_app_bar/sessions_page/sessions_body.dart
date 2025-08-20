@@ -54,7 +54,12 @@ class _SessionsBodyState extends State<SessionsBody> {
 
     final password = store.getPassword(user) ?? '';
 
-    final result = await getSessionsFunction(api, config.route, user, password)
+    final result = await getSessionsFunction(
+          api,
+          ConfigStorage.defaultRoute,
+          user,
+          password,
+        )
         .timeout(
           Duration(milliseconds: config.timeoutInMillis),
           onTimeout: () {
@@ -79,10 +84,12 @@ class _SessionsBodyState extends State<SessionsBody> {
           return [];
         });
 
-    setState(() {
-      sessions.clear();
-      sessions.addAll(result);
-    });
+    if (mounted) {
+      setState(() {
+        sessions.clear();
+        sessions.addAll(result);
+      });
+    }
   }
 
   @override

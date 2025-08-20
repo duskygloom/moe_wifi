@@ -86,9 +86,11 @@ class ConfigStorage extends ChangeNotifier {
 
   /* route */
 
+  static const defaultRoute = 'http://1.254.254.254';
+
   String get route {
     final value = _getConfig<String>('route');
-    return value ?? 'http://1.254.254.254';
+    return value ?? defaultRoute;
   }
 
   set route(String value) {
@@ -110,11 +112,15 @@ class ConfigStorage extends ChangeNotifier {
 
   /* timeout */
 
-  int get defaultTimeout => 5000;
+  static const defaultTimeout = 5000;
 
   int get timeoutInMillis {
     final value = _getConfig<int>('timeoutInMillis');
     return value ?? defaultTimeout;
+  }
+
+  String get timeoutString {
+    return '${timeoutInMillis / 1000} s';
   }
 
   set timeoutInMillis(int value) {

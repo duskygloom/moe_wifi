@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:moe_wifi/core/main_theme.dart';
 import 'package:moe_wifi/model/config_storage.dart';
 import 'package:moe_wifi/model/form_keys.dart';
 import 'package:moe_wifi/model/user_storage.dart';
-import 'package:moe_wifi/view/core/save_dialog.dart';
 import 'package:moe_wifi/view/home_app_bar/new_user_dialog/new_user_form.dart';
 
 class NewUserDialog extends StatelessWidget {
@@ -26,13 +26,17 @@ class NewUserDialog extends StatelessWidget {
       }
     }
 
-    return SaveDialog(
-      onSave: onSave,
-      child: NewUserForm(
-        phoneCtrl: phoneCtrl,
-        passwordCtrl: passwordCtrl,
-        onDone: onSave,
+    return AlertDialog(
+      title: Text('New user'),
+      content: SizedBox(
+        width: scaledSizeOf(context, 400),
+        child: NewUserForm(
+          phoneCtrl: phoneCtrl,
+          passwordCtrl: passwordCtrl,
+          onDone: onSave,
+        ),
       ),
+      actions: [TextButton(onPressed: onSave, child: Text('Save'))],
     );
   }
 }
