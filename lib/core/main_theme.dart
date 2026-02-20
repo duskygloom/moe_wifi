@@ -39,11 +39,7 @@ class MainTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         backgroundColor: colors.surfaceContainer,
       ),
-      snackBarTheme: SnackBarThemeData(
-        behavior: SnackBarBehavior.floating,
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      ),
+      snackBarTheme: SnackBarThemeData(elevation: 4),
     );
   }
 
